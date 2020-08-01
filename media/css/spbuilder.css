@@ -1,0 +1,27 @@
+.quantumsbuilder-wrap {
+    position: relative;
+}
+
+.quantumsbuilder-wrap > div {
+    display: none;
+}
+
+.quantumsbuilder {
+    display: block !important;
+    width: 100%;
+    height: 100%;
+}
+
+.quantumsbuilder-wrap .sp-pagebuilder-btn-close-modal {
+    background-color: #027af4;
+    border-radius: 25px;
+    color: #fff;
+    height: 30px;
+    line-height: 30px;
+    position: absolute;
+    right: -15px;
+    text-align: center;
+    top: -15px;
+    width: 30px;
+    z-index: 3;
+}

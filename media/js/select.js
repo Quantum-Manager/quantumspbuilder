@@ -1,36 +1,82 @@
 document.addEventListener('DOMContentLoaded' ,function () {
     let QuantummanagerSpbuilder = window.parent.QuantummanagerSpbuilder,
-        buttonInsert = QuantummanagerSpbuilder.modal.querySelector('.button-insert'),
         pathFile = '';
-    buttonInsert.setAttribute('disabled', 'disabled');
 
-    buttonInsert.addEventListener('click', function () {
-        let fm = QuantummanagerLists[0];
+    setTimeout(function () {
+        let fm = window.QuantummanagerLists[0];
+        fm.Quantumtoolbar.buttonAdd('insertFileEditor', 'center', 'file-actions', 'btn-insert btn-primary btn-hide', QuantumwindowLang.buttonInsert, 'quantummanager-icon-insert-inverse', {}, function (ev) {
 
-        jQuery.get(QuantumUtils.getFullUrl("/administrator/index.php?option=com_quantummanager&task=quantumviewfiles.getParsePath&path=" + encodeURIComponent(pathFile)
-            + '&scope=' + fm.data.scope + '&v=' + QuantumUtils.randomInteger(111111, 999999)))
-            .done(function (response) {
-                response = JSON.parse(response);
-                let input = QuantummanagerYoothemepro.fieldWrap.querySelector('input');
-                if(input !== null) {
-                    input.focus();
-                    input.value = response.path;
-                    let evt = document.createEvent("HTMLEvents");
-                    evt.initEvent("input");
-                    input.dispatchEvent(evt);
-                }
-                QuantummanagerSpbuilder.fieldWrap = false;
+            jQuery.get(QuantumUtils.getFullUrl("/administrator/index.php?option=com_quantummanager&task=quantumviewfiles.getParsePath&path=" + encodeURIComponent(pathFile)
+                + '&scope=' + fm.data.scope + '&v=' + QuantumUtils.randomInteger(111111, 999999)))
+                .done(function (response) {
+                    response = JSON.parse(response);
+                    QuantummanagerSpbuilder.browse.click();
 
-                //скрываем модальное окно
-            });
+                    let loadFolder = function(folder, callback) {
+                        let listFiles =  QuantummanagerSpbuilder.modal.querySelector('.sp-pagebuilder-media');
+                        let folders = listFiles.querySelectorAll('.sp-pagebuilder-media-folder');
+                        let findFolder = false;
 
-    });
+                        for (let i=0;i<folders.length;i++) {
+                            if(folders[i].querySelector('.sp-pagebuilder-media-title').innerHTML === folder) {
+                                QuantumUtils.triggerElementEvent('dblclick', folders[i]);
+                                let startTime = new Date().getTime();
+                                while (true) {
+
+                                    if((new Date().getTime()) - startTime > 3000) {
+                                        break;
+                                    }
+
+                                    if(listFiles.querySelectorAll('.sp-pagebuilder-media-folder').length > 0) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                        return false;
+                    }
+
+                    response.path = response.path.replace('images/', '');
+
+                    let path_split = response.path.split('/');
+                    let file = path_split[path_split.length-1];
+                    let count = path_split.length-1;
+                    let current = 0;
+
+                    while (true) {
+                        if(current >= count) {
+
+                            let listFiles =  QuantummanagerSpbuilder.modal.querySelector('.sp-pagebuilder-media');
+                            let files = listFiles.querySelectorAll('.sp-pagebuilder-media-item');
+                            for (let i=0;i<files.length;i++) {
+                                if(files[i].querySelector('span').getAttribute('title') === file) {
+                                    files[i].click();
+                                    QuantummanagerSpbuilder.modal.querySelector('#sp-pagebuilder-media-tools .sp-pagebuilder-btn-success').click();
+                                    break;
+                                }
+                            }
+
+                            break;
+                        }
+
+                        loadFolder(path_split[current]);
+                        current++;
+                    }
+
+
+                });
+
+            ev.preventDefault();
+        });
+    }, 50);
+
+
 
     QuantumEventsDispatcher.add('clickObject', function (fm) {
         let file = fm.Quantumviewfiles.objectSelect;
 
         if(file === undefined) {
-            buttonInsert.setAttribute('disabled', 'disabled');
+            fm.Quantumtoolbar.buttonsList['insertFileEditor'].classList.add('btn-hide');
             return;
         }
     });
@@ -38,13 +84,13 @@ document.addEventListener('DOMContentLoaded' ,function () {
     QuantumEventsDispatcher.add('clickFile', function (fm) {
         let file = fm.Quantumviewfiles.file;
         if(file === undefined) {
-            buttonInsert.setAttribute('disabled', 'disabled');
+            fm.Quantumtoolbar.buttonsList['insertFileEditor'].classList.add('btn-hide');
             return;
         }
 
         let name = file.querySelector('.file-name').innerHTML;
         pathFile = fm.data.path + '/' + name;
-        buttonInsert.removeAttribute('disabled');
+        fm.Quantumtoolbar.buttonsList['insertFileEditor'].classList.remove('btn-hide');
     });
 
     QuantumEventsDispatcher.add('dblclickFile', function (fm, n, el) {
@@ -57,11 +103,11 @@ document.addEventListener('DOMContentLoaded' ,function () {
     });
 
     QuantumEventsDispatcher.add('reloadPaths', function (fm) {
-        buttonInsert.setAttribute('disabled', 'disabled');
+        fm.Quantumtoolbar.buttonsList['insertFileEditor'].classList.add('btn-hide');
     });
 
     QuantumEventsDispatcher.add('updatePath', function (fm) {
-        buttonInsert.setAttribute('disabled', 'disabled');
+        fm.Quantumtoolbar.buttonsList['insertFileEditor'].classList.add('btn-hide');
     });
 
     QuantumEventsDispatcher.add('uploadComplete', function (fm) {
@@ -72,7 +118,7 @@ document.addEventListener('DOMContentLoaded' ,function () {
 
         let name = fm.Qantumupload.filesLists[0];
         pathFile = fm.data.path + '/' + fm.Qantumupload.filesLists[0];
-        buttonInsert.removeAttribute('disabled');
+        fm.Quantumtoolbar.buttonsList['insertFileEditor'].classList.remove('btn-hide');
     });
 
 

@@ -71,10 +71,15 @@ class plgSystemQuantumspbuilder extends CMSPlugin
 			return;
 		}
 
-		if($option !== 'com_sppagebuilder' || $view === 'page' || $layout === 'edit')
+		if($option !== 'com_sppagebuilder' || $view !== 'page' || $layout !== 'edit')
 		{
 			return;
 		}
+
+        HTMLHelper::_('stylesheet', 'plg_system_quantumspbuilder/spbuilder.css', [
+            'version' => filemtime(__FILE__),
+            'relative' => true
+        ]);
 
 		HTMLHelper::_('script', 'plg_system_quantumspbuilder/modal.js', [
 			'version' => filemtime(__FILE__),
@@ -85,6 +90,7 @@ class plgSystemQuantumspbuilder extends CMSPlugin
 			'version' => filemtime(__FILE__),
 			'relative' => true
 		]);
+
 
 		JLoader::register('QuantummanagerHelper', JPATH_SITE . '/administrator/components/com_quantummanager/helpers/quantummanager.php');
 		QuantummanagerHelper::loadLang();
@@ -101,7 +107,7 @@ EOT
 	}
 
 
-	public function onAjaxQuantumyoothemepro()
+	public function onAjaxQuantumspbuilder()
 	{
 		$layout = new FileLayout('select', JPATH_SITE . '/plugins/system/quantumspbuilder/tmpl');
 		echo $layout->render();

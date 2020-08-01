@@ -28,9 +28,9 @@ else
 
 $app->getSession()->clear('quantummanageraddscripts');
 
-HTMLHelper::_('stylesheet', 'plg_system_quantumspbuilder/modal.css', [
-	'version' => filemtime(__FILE__),
-	'relative' => true
+HTMLHelper::_('stylesheet', 'com_quantummanager/window.css', [
+    'version' => filemtime(__FILE__),
+    'relative' => true
 ]);
 
 HTMLHelper::_('script', 'plg_system_quantumspbuilder/select.js', [
