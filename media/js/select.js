@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded' ,function () {
                     response = JSON.parse(response);
                     QuantummanagerSpbuilder.browse.click();
 
-                    let loadFolder = function(folder, callback) {
+                    let loadFolder = function(folder) {
                         let listFiles =  QuantummanagerSpbuilder.modal.querySelector('.sp-pagebuilder-media');
                         let folders = listFiles.querySelectorAll('.sp-pagebuilder-media-folder');
                         let findFolder = false;
