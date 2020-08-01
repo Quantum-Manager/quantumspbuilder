@@ -62,14 +62,16 @@ class plgSystemQuantumspbuilder extends CMSPlugin
 	{
 
 		$admin = $this->app->isClient('administrator');
-		$p = $this->app->input->getCmd('p', '');
+		$option = $this->app->input->getCmd('option', '');
+		$view = $this->app->input->getCmd('view', '');
+		$layout = $this->app->input->getCmd('layout', '');
 
 		if(!$admin)
 		{
 			return;
 		}
 
-		if(empty($p))
+		if($option !== 'com_sppagebuilder' || $view === 'page' || $layout === 'edit')
 		{
 			return;
 		}

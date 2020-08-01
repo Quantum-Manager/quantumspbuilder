@@ -28,12 +28,12 @@ else
 
 $app->getSession()->clear('quantummanageraddscripts');
 
-HTMLHelper::_('stylesheet', 'plg_system_quantummanagermedia/modal.css', [
+HTMLHelper::_('stylesheet', 'plg_system_quantumspbuilder/modal.css', [
 	'version' => filemtime(__FILE__),
 	'relative' => true
 ]);
 
-HTMLHelper::_('script', 'plg_system_quantumyoothemepro/select.js', [
+HTMLHelper::_('script', 'plg_system_quantumspbuilder/select.js', [
 	'version' => filemtime(__FILE__),
 	'relative' => true
 ]);
@@ -87,6 +87,13 @@ try {
 			'position' => 'bottom'
 		];
 	}
+
+    if((int)QuantummanagerHelper::getParamsComponentValue('pexels', '1'))
+    {
+        $fields['quantumpexels'] = [
+            'position' => 'bottom'
+        ];
+    }
 
 	if((int)QuantummanagerHelper::getParamsComponentValue('pixabay', '1'))
 	{
