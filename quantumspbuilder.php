@@ -71,39 +71,53 @@ class plgSystemQuantumspbuilder extends CMSPlugin
 			return;
 		}
 
-		if($option !== 'com_sppagebuilder' || $view !== 'page' || $layout !== 'edit')
+		if($option === 'com_sppagebuilder' && $view === 'page' && $layout === 'edit')
 		{
-			return;
-		}
+            HTMLHelper::_('stylesheet', 'plg_system_quantumspbuilder/spbuilder.css', [
+                'version' => filemtime(__FILE__),
+                'relative' => true
+            ]);
 
-        HTMLHelper::_('stylesheet', 'plg_system_quantumspbuilder/spbuilder.css', [
-            'version' => filemtime(__FILE__),
-            'relative' => true
-        ]);
+            HTMLHelper::_('script', 'plg_system_quantumspbuilder/modal.js', [
+                'version' => filemtime(__FILE__),
+                'relative' => true
+            ]);
 
-		HTMLHelper::_('script', 'plg_system_quantumspbuilder/modal.js', [
-			'version' => filemtime(__FILE__),
-			'relative' => true
-		]);
-
-		HTMLHelper::_('script', 'com_quantummanager/utils.js', [
-			'version' => filemtime(__FILE__),
-			'relative' => true
-		]);
+            HTMLHelper::_('script', 'com_quantummanager/utils.js', [
+                'version' => filemtime(__FILE__),
+                'relative' => true
+            ]);
 
 
-		JLoader::register('QuantummanagerHelper', JPATH_SITE . '/administrator/components/com_quantummanager/helpers/quantummanager.php');
-		QuantummanagerHelper::loadLang();
+            JLoader::register('QuantummanagerHelper', JPATH_SITE . '/administrator/components/com_quantummanager/helpers/quantummanager.php');
+            QuantummanagerHelper::loadLang();
 
-		$insert = htmlspecialchars(Text::_('COM_QUANTUMMANAGER_ACTION_SELECT'), ENT_QUOTES);
-		$cancel = htmlspecialchars(Text::_('COM_QUANTUMMANAGER_ACTION_CANCEL'), ENT_QUOTES);
-		Factory::getDocument()->addScriptDeclaration(<<<EOT
+            $insert = htmlspecialchars(Text::_('COM_QUANTUMMANAGER_ACTION_SELECT'), ENT_QUOTES);
+            $cancel = htmlspecialchars(Text::_('COM_QUANTUMMANAGER_ACTION_CANCEL'), ENT_QUOTES);
+            Factory::getDocument()->addScriptDeclaration(<<<EOT
 window.QuantumSpbuilderLang = {
 		'insert': "{$insert}",
 		'cancel': "{$cancel}",
 };
 EOT
-		);
+            );
+		}
+
+        if($option === 'com_sppagebuilder' && $view === 'media')
+        {
+
+            HTMLHelper::_('stylesheet', 'plg_system_quantumspbuilder/formain.css', [
+                'version' => filemtime(__FILE__),
+                'relative' => true
+            ]);
+
+            HTMLHelper::_('script', 'plg_system_quantumspbuilder/formain.js', [
+                'version' => filemtime(__FILE__),
+                'relative' => true
+            ]);
+        }
+
+
 	}
 
 

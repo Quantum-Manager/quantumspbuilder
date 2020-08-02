@@ -97,9 +97,7 @@ document.addEventListener('DOMContentLoaded' ,function () {
         let name = el.querySelector('.file-name').innerHTML;
         pathFile = fm.data.path + '/' + name;
 
-        let evt = document.createEvent("HTMLEvents");
-        evt.initEvent("click");
-        buttonInsert.dispatchEvent(evt);
+        fm.Quantumtoolbar.buttonsList['insertFileEditor'].click();
     });
 
     QuantumEventsDispatcher.add('reloadPaths', function (fm) {
