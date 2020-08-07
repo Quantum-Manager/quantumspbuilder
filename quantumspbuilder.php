@@ -65,13 +65,23 @@ class plgSystemQuantumspbuilder extends CMSPlugin
 		$option = $this->app->input->getCmd('option', '');
 		$view = $this->app->input->getCmd('view', '');
 		$layout = $this->app->input->getCmd('layout', '');
+        $config = Factory::getConfig();
+        $check = false;
 
-		if(!$admin)
+        if($admin)
 		{
-			return;
+		    $check = ($option === 'com_sppagebuilder' && $view === 'page' && $layout === 'edit');
 		}
+		else
+        {
+            if(!$config->get('shared_session', false))
+            {
+                return;
+            }
+            $check = ($option === 'com_sppagebuilder' && $view === 'form' && $layout === 'edit');
+        }
 
-		if($option === 'com_sppagebuilder' && $view === 'page' && $layout === 'edit')
+		if($check)
 		{
             HTMLHelper::_('stylesheet', 'plg_system_quantumspbuilder/spbuilder.css', [
                 'version' => filemtime(__FILE__),
@@ -123,7 +133,18 @@ EOT
 
 	public function onAjaxQuantumspbuilder()
 	{
-		$layout = new FileLayout('select', JPATH_SITE . '/plugins/system/quantumspbuilder/tmpl');
+        $admin = $this->app->isClient('administrator');
+        $config = Factory::getConfig();
+
+        if(!$admin)
+        {
+            if(!$config->get('shared_session', false))
+            {
+                return;
+            }
+        }
+
+        $layout = new FileLayout('select', JPATH_SITE . '/plugins/system/quantumspbuilder/tmpl');
 		echo $layout->render();
 		//$this->app->close();
 	}

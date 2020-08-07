@@ -8,8 +8,14 @@ document.addEventListener('DOMContentLoaded' ,function () {
         let search = ev.target;
         let searchMaxNode = 20;
         let currentNode = 0;
+        let find = false;
 
         while (true) {
+
+            if(find)
+            {
+                break;
+            }
 
             if(currentNode > searchMaxNode) {
                 break;
@@ -17,6 +23,27 @@ document.addEventListener('DOMContentLoaded' ,function () {
 
             if(search === null || search === undefined) {
                 break;
+            }
+
+            if(search.classList.contains('sp-pagebuilder-form-group'))
+            {
+                let formGroup = search;
+                let startTime = new Date().getTime();
+                let waitMediaModal = setInterval(function () {
+                    if((new Date().getTime()) - startTime > 1000) {
+                        clearInterval(waitMediaModal);
+                    }
+
+                    if(formGroup.querySelector('#sp-pagebuilder-media-modal') !== null)
+                    {
+                        find = true;
+                        clearInterval(waitMediaModal);
+                        QuantummanagerSpbuilder.fieldWrap = formGroup;
+                        openModal();
+                    }
+
+
+                }, 100);
             }
 
             if(search.classList.contains('media-action-button')) {
@@ -44,6 +71,10 @@ document.addEventListener('DOMContentLoaded' ,function () {
             return;
         }
 
+        if(QuantummanagerSpbuilder.fieldWrap.querySelector('.quantumsbuilder') !== null) {
+            return;
+        }
+
         //переключаем на просмотр файлов
         let browseAll = modal.querySelectorAll('.sp-pagebuilder-browse-media'),
             browse = browseAll[browseAll.length-1];
@@ -56,7 +87,7 @@ document.addEventListener('DOMContentLoaded' ,function () {
 
         quantumdiv.classList.add('quantumsbuilder');
         quantumdiv.appendChild(QuantummanagerSpbuilder.modalClose);
-        quantumdiv.innerHTML += '<iframe src="index.php?option=com_ajax&plugin=quantumspbuilder&group=system&format=html&tmpl=component" style="width: 100%;height: 100%">';
+        quantumdiv.innerHTML += '<iframe src="/administrator/index.php?option=com_ajax&plugin=quantumspbuilder&group=system&format=html&tmpl=component" style="width: 100%;height: 100%">';
 
         QuantummanagerSpbuilder.modal.appendChild(quantumdiv);
         QuantummanagerSpbuilder.modal.classList.add('quantumsbuilder-wrap');

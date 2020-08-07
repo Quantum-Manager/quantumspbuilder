@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded' ,function () {
                     response.path = response.path.replace('images/', '');
 
                     let path_split = response.path.split('/');
-                    let file = path_split[path_split.length-1];
+                    let file = path_split[path_split.length-1].trim();
                     let count = path_split.length-1;
                     let current = 0;
 
@@ -48,8 +48,17 @@ document.addEventListener('DOMContentLoaded' ,function () {
 
                             let listFiles =  QuantummanagerSpbuilder.modal.querySelector('.sp-pagebuilder-media');
                             let files = listFiles.querySelectorAll('.sp-pagebuilder-media-item');
+
                             for (let i=0;i<files.length;i++) {
-                                if(files[i].querySelector('span').getAttribute('title') === file) {
+                                let searchName = files[i].querySelector('span').getAttribute('title');
+
+                                if(searchName === null || searchName === '') {
+                                    searchName = files[i].textContent;
+                                }
+
+                                searchName = searchName.trim();
+
+                                if(searchName === file) {
                                     files[i].click();
                                     QuantummanagerSpbuilder.modal.querySelector('#sp-pagebuilder-media-tools .sp-pagebuilder-btn-success').click();
                                     break;
