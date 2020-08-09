@@ -12,7 +12,8 @@
     height: 100%;
 }
 
-.quantumsbuilder-wrap .sp-pagebuilder-btn-close-modal {
+.quantumsbuilder-wrap .quantumsbuilder-close {
+    display: block;
     background-color: #027af4;
     border-radius: 25px;
     color: #fff;
@@ -23,5 +24,6 @@
     text-align: center;
     top: -15px;
     width: 30px;
+    cursor: pointer;
     z-index: 3;
 }

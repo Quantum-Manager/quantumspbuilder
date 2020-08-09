@@ -83,15 +83,26 @@ document.addEventListener('DOMContentLoaded' ,function () {
         QuantummanagerSpbuilder.modal = modal;
         QuantummanagerSpbuilder.modalClose = modal.querySelector('.sp-pagebuilder-btn-close-modal');
 
-        let quantumdiv = document.createElement('div');
 
+        let quantumdiv = document.createElement('div');
+        let close = document.createElement('span');
+
+        close.setAttribute('class', 'quantumsbuilder-close');
+        close.innerHTML = '<i class="fa fa-times"></i>';
         quantumdiv.classList.add('quantumsbuilder');
-        quantumdiv.appendChild(QuantummanagerSpbuilder.modalClose);
+        quantumdiv.appendChild(close);
         quantumdiv.innerHTML += '<iframe src="/administrator/index.php?option=com_ajax&plugin=quantumspbuilder&group=system&format=html&tmpl=component" style="width: 100%;height: 100%">';
+
+        quantumdiv.addEventListener('click', function (ev) {
+            if(ev.target.tagName === 'SPAN') {
+                if(ev.target.classList.contains('quantumsbuilder-close')) {
+                    QuantummanagerSpbuilder.modalClose.click();
+                }
+            }
+        });
 
         QuantummanagerSpbuilder.modal.appendChild(quantumdiv);
         QuantummanagerSpbuilder.modal.classList.add('quantumsbuilder-wrap');
-
 
     }
 
