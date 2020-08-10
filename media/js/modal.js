@@ -94,11 +94,22 @@ document.addEventListener('DOMContentLoaded' ,function () {
         quantumdiv.innerHTML += '<iframe src="/administrator/index.php?option=com_ajax&plugin=quantumspbuilder&group=system&format=html&tmpl=component" style="width: 100%;height: 100%">';
 
         quantumdiv.addEventListener('click', function (ev) {
+            let check = null;
+
             if(ev.target.tagName === 'SPAN') {
-                if(ev.target.classList.contains('quantumsbuilder-close')) {
+                check = ev.target;
+            }
+
+            if(ev.target.tagName === 'I') {
+                check = ev.target.parentElement;
+            }
+
+            if(check !== null) {
+                if(check.classList.contains('quantumsbuilder-close')) {
                     QuantummanagerSpbuilder.modalClose.click();
                 }
             }
+
         });
 
         QuantummanagerSpbuilder.modal.appendChild(quantumdiv);
