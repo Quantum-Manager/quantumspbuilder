@@ -50,7 +50,15 @@ document.addEventListener('DOMContentLoaded' ,function () {
                             let files = listFiles.querySelectorAll('.sp-pagebuilder-media-item');
 
                             for (let i=0;i<files.length;i++) {
-                                let searchName = files[i].querySelector('span').getAttribute('title');
+                                let searchName = '';
+
+                                let span = files[i].querySelector('span');
+                                if(span) {
+                                    searchName = span.getAttribute('title');
+                                } else {
+                                    let media_title = files[i].querySelector('.sp-pagebuilder-media-title');
+                                    searchName = media_title.innerHTML;
+                                }
 
                                 if(searchName === null || searchName === '') {
                                     searchName = files[i].textContent;
@@ -60,7 +68,12 @@ document.addEventListener('DOMContentLoaded' ,function () {
 
                                 if(searchName === file) {
                                     files[i].click();
-                                    QuantummanagerSpbuilder.modal.querySelector('#sp-pagebuilder-media-tools .sp-pagebuilder-btn-success').click();
+                                    let modal_button_insert = QuantummanagerSpbuilder.modal.querySelector('#sp-pagebuilder-media-tools .sp-pagebuilder-btn-success');
+                                    if(modal_button_insert === null || modal_button_insert === undefined) {
+                                        modal_button_insert = QuantummanagerSpbuilder.modal.querySelector('#sp-pagebuilder-media-modal .btn-success');
+                                    }
+
+                                    modal_button_insert.click();
                                     break;
                                 }
                             }
