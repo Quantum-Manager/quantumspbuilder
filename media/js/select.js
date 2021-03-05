@@ -6,11 +6,28 @@ document.addEventListener('DOMContentLoaded' ,function () {
         let fm = window.QuantummanagerLists[0];
         fm.Quantumtoolbar.buttonAdd('insertFileEditor', 'center', 'file-actions', 'btn-insert btn-primary btn-hide', QuantumwindowLang.buttonInsert, 'quantummanager-icon-insert-inverse', {}, function (ev) {
 
+            let modal = QuantumUtils.modal({
+                'fm': fm,
+                'body': '<div style="' +
+                    'justify-content: center;' +
+                    'align-items: center;' +
+                    'display: flex;' +
+                    'flex-wrap: wrap;' +
+                    'height: 100%;' +
+                    '">' +
+                    '<div>' +
+                    '<div style="font-size: 25px;width: 100%">Происходит вставка файла...</div>' +
+                    '</div>' +
+                    '</div>',
+                'close': false
+            });
+
             jQuery.get(QuantumUtils.getFullUrl("/administrator/index.php?option=com_quantummanager&task=quantumviewfiles.getParsePath&path=" + encodeURIComponent(pathFile)
                 + '&scope=' + fm.data.scope + '&v=' + QuantumUtils.randomInteger(111111, 999999)))
                 .done(function (response) {
                     response = JSON.parse(response);
                     QuantummanagerSpbuilder.browse.click();
+                    let findFile = false;
 
                     let loadFolder = function(folder) {
                         let listFiles =  QuantummanagerSpbuilder.modal.querySelector('.sp-pagebuilder-media');
@@ -67,6 +84,7 @@ document.addEventListener('DOMContentLoaded' ,function () {
                                 searchName = searchName.trim();
 
                                 if(searchName === file) {
+                                    findFile = true;
                                     files[i].click();
                                     let modal_button_insert = QuantummanagerSpbuilder.modal.querySelector('#sp-pagebuilder-media-tools .sp-pagebuilder-btn-success');
                                     if(modal_button_insert === null || modal_button_insert === undefined) {
@@ -86,7 +104,16 @@ document.addEventListener('DOMContentLoaded' ,function () {
                     }
 
 
-                });
+                    if(!findFile) {
+                        modal.remove();
+                        QuantumUtils.notify({
+                            text: 'Не удалось вставить файл'
+                        });
+                    }
+
+                }).fail(function () {
+                    modal.remove();
+            });
 
             ev.preventDefault();
         });
