@@ -146,6 +146,7 @@ catch (Exception $e) {
         'inputHspace': '<?php echo Text::_('PLG_QUANTUMMANAGERMEDIA_WINDOW_HSPACE'); ?>',
         'inputVspace': '<?php echo Text::_('PLG_QUANTUMMANAGERMEDIA_WINDOW_VSPACES'); ?>',
         'inputAlign': '<?php echo Text::_('PLG_QUANTUMMANAGERMEDIA_WINDOW_ALIGN'); ?>',
-        'inputCssClass': '<?php echo Text::_('PLG_QUANTUMMANAGERMEDIA_WINDOW_CLASS'); ?>'
+        'inputCssClass': '<?php echo Text::_('PLG_QUANTUMMANAGERMEDIA_WINDOW_CLASS'); ?>',
+        'insertedFile': '<?php echo Text::_('PLG_QUANTUMSPBUILDER_INSERT_FILE'); ?>',
     };
 </script>

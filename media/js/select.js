@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded' ,function () {
                     'height: 100%;' +
                     '">' +
                     '<div>' +
-                    '<div style="font-size: 25px;width: 100%">Происходит вставка файла...</div>' +
+                    '<div style="font-size: 25px;width: 100%">' + QuantumwindowLang.insertedFile + '</div>' +
                     '</div>' +
                     '</div>',
                 'close': false
