@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded' ,function () {
 
     setTimeout(function () {
         let fm = window.QuantummanagerLists[0];
-        fm.Quantumtoolbar.buttonAdd('insertFileEditor', 'center', 'file-actions', 'btn-insert btn-primary btn-hide', QuantumwindowLang.buttonInsert, 'quantummanager-icon-insert-inverse', {}, function (ev) {
+        fm.Quantumtoolbar.buttonAdd('insertFileEditor', 'center', 'file-actions', 'qm-btn-insert qm-btn qm-btn-primary qm-btn-hide', QuantumwindowLang.buttonInsert, 'quantummanager-icon-insert-inverse', {}, function (ev) {
 
             let modal = QuantumUtils.modal({
                 'fm': fm,
