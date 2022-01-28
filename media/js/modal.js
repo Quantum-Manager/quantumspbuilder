@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded' ,function () {
         close.innerHTML = '<i class="fa fa-times"></i>';
         quantumdiv.classList.add('quantumsbuilder');
         quantumdiv.appendChild(close);
-        quantumdiv.innerHTML += '<iframe src="/administrator/index.php?option=com_ajax&plugin=quantumspbuilder&group=system&format=html&tmpl=component" style="width: 100%;height: 100%">';
+        quantumdiv.innerHTML += '<iframe src="index.php?option=com_ajax&plugin=quantumspbuilder&group=system&format=html&tmpl=component" style="width: 100%;height: 100%">';
 
         quantumdiv.addEventListener('click', function (ev) {
             let check = null;
