@@ -65,7 +65,6 @@ class plgSystemQuantumspbuilder extends CMSPlugin
 		$option = $this->app->input->getCmd('option', '');
 		$view = $this->app->input->getCmd('view', '');
 		$layout = $this->app->input->getCmd('layout', '');
-        $config = Factory::getConfig();
         $check = false;
 
         if($admin)
@@ -74,10 +73,11 @@ class plgSystemQuantumspbuilder extends CMSPlugin
 		}
 		else
         {
-            if(!$config->get('shared_session', false))
-            {
-                return;
-            }
+	        if(!$this->accessCheck())
+	        {
+		        return;
+	        }
+
             $check = ($option === 'com_sppagebuilder' && $view === 'form' && $layout === 'edit');
         }
 
@@ -133,20 +133,40 @@ EOT
 
 	public function onAjaxQuantumspbuilder()
 	{
-        $admin = $this->app->isClient('administrator');
-        $config = Factory::getConfig();
 
-        if(!$admin)
+        if(!$this->accessCheck())
         {
-            if(!$config->get('shared_session', false))
-            {
-                return;
-            }
+			return;
         }
 
         $layout = new FileLayout('select', JPATH_SITE . '/plugins/system/quantumspbuilder/tmpl');
 		echo $layout->render();
-		//$this->app->close();
+	}
+
+
+	protected function accessCheck()
+	{
+
+		if ($this->app->isClient('administrator'))
+		{
+			return true;
+		}
+
+		// проверяем на включенность параметра
+		JLoader::register('QuantummanagerHelper', JPATH_ADMINISTRATOR . '/components/com_quantummanager/helpers/quantummanager.php');
+
+		if(!(int)QuantummanagerHelper::getParamsComponentValue('front', 0))
+		{
+			return false;
+		}
+
+		// проверяем что пользователь авторизован
+		if(Factory::getUser()->id === 0)
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 }
