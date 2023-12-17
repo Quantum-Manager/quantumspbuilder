@@ -9,7 +9,7 @@
 	<license>GNU General Public License version 3 or later; see license.txt</license>
 	<version>1.5</version>
 	<description>PLG_QUANTUMSPBUILDER_XML_DESCRIPTION</description>
-
+	<namespace path="src">Joomla\Plugin\System\QuantumSPBuilder</namespace>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.plg_system_quantumspbuilder.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_system_quantumspbuilder.sys.ini</language>
@@ -23,7 +23,8 @@
 	</media>
 
 	<files>
-		<filename plugin="quantumspbuilder">quantumspbuilder.php</filename>
+		<folder>services</folder>
+		<folder plugin="quantumspbuilder">src</folder>
 		<folder>language</folder>
 		<folder>tmpl</folder>
 	</files>

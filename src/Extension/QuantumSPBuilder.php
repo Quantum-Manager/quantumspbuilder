@@ -1,4 +1,5 @@
-<?php
+<?php namespace Joomla\Plugin\System\QuantumSPBuilder\Extension;
+
 /**
  * @package    quantummanager
  *
@@ -14,17 +15,18 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\Component\QuantumManager\Administrator\Helper\QuantummanagerHelper;
 use Joomla\Database\DatabaseDriver;
 
 defined('_JEXEC') or die;
 
 /**
- * Quantumyoothemepro plugin.
+ * QuantumSPBuilder plugin.
  *
  * @package   quantumyoothemepro
  * @since     1.0.0
  */
-class plgSystemQuantumspbuilder extends CMSPlugin
+class QuantumSPBuilder extends CMSPlugin
 {
 	/**
 	 * Application object
@@ -49,7 +51,6 @@ class plgSystemQuantumspbuilder extends CMSPlugin
 	 * @since  1.0.0
 	 */
 	protected $autoloadLanguage = true;
-
 
 	/**
 	 * onAfterRender.
@@ -98,8 +99,6 @@ class plgSystemQuantumspbuilder extends CMSPlugin
                 'relative' => true
             ]);
 
-
-            JLoader::register('QuantummanagerHelper', JPATH_SITE . '/administrator/components/com_quantummanager/helpers/quantummanager.php');
             QuantummanagerHelper::loadLang();
 
             $insert = htmlspecialchars(Text::_('COM_QUANTUMMANAGER_ACTION_SELECT'), ENT_QUOTES);
@@ -127,9 +126,7 @@ EOT
             ]);
         }
 
-
 	}
-
 
 	public function onAjaxQuantumspbuilder()
 	{
@@ -143,7 +140,6 @@ EOT
 		echo $layout->render();
 	}
 
-
 	protected function accessCheck()
 	{
 
@@ -153,8 +149,6 @@ EOT
 		}
 
 		// проверяем на включенность параметра
-		JLoader::register('QuantummanagerHelper', JPATH_ADMINISTRATOR . '/components/com_quantummanager/helpers/quantummanager.php');
-
 		if(!(int)QuantummanagerHelper::getParamsComponentValue('front', 0))
 		{
 			return false;
