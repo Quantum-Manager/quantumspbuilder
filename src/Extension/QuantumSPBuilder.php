@@ -1,4 +1,6 @@
-<?php namespace Joomla\Plugin\System\QuantumSPBuilder\Extension;
+<?php
+
+namespace Joomla\Plugin\System\QuantumSPBuilder\Extension;
 
 /**
  * @package    quantummanager
@@ -9,153 +11,125 @@
  * @link       https://www.norrnext.com
  */
 
-use Joomla\CMS\Application\CMSApplication;
+defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\WebAsset\WebAssetManager;
 use Joomla\Component\QuantumManager\Administrator\Helper\QuantummanagerHelper;
-use Joomla\Database\DatabaseDriver;
+use Joomla\Event\SubscriberInterface;
 
-defined('_JEXEC') or die;
-
-/**
- * QuantumSPBuilder plugin.
- *
- * @package   quantumyoothemepro
- * @since     1.0.0
- */
-class QuantumSPBuilder extends CMSPlugin
+class QuantumSPBuilder extends CMSPlugin implements SubscriberInterface
 {
-	/**
-	 * Application object
-	 *
-	 * @var    CMSApplication
-	 * @since  1.0.0
-	 */
 	protected $app;
 
-	/**
-	 * Database object
-	 *
-	 * @var    DatabaseDriver
-	 * @since  1.0.0
-	 */
 	protected $db;
 
-	/**
-	 * Affects constructor behavior. If true, language files will be loaded automatically.
-	 *
-	 * @var    boolean
-	 * @since  1.0.0
-	 */
 	protected $autoloadLanguage = true;
 
-	/**
-	 * onAfterRender.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0.0
-	 */
-	public function onBeforeCompileHead()
+	public static function getSubscribedEvents(): array
 	{
+		return [
+			'onBeforeCompileHead'    => 'onBeforeCompileHead',
+			'onAjaxQuantumspbuilder' => 'onAjax',
+		];
+	}
 
-		$admin = $this->app->isClient('administrator');
+	public function onBeforeCompileHead(): void
+	{
+		$admin  = $this->app->isClient('administrator');
 		$option = $this->app->input->getCmd('option', '');
-		$view = $this->app->input->getCmd('view', '');
+		$view   = $this->app->input->getCmd('view', '');
 		$layout = $this->app->input->getCmd('layout', '');
-        $check = false;
 
-        if($admin)
+		if ($admin)
 		{
-		    $check = ($option === 'com_sppagebuilder' && $view === 'page' && $layout === 'edit');
+			$check = ($option === 'com_sppagebuilder' && $view === 'page' && $layout === 'edit');
 		}
 		else
-        {
-	        if(!$this->accessCheck())
-	        {
-		        return;
-	        }
-
-            $check = ($option === 'com_sppagebuilder' && $view === 'form' && $layout === 'edit');
-        }
-
-		if($check)
 		{
-            HTMLHelper::_('stylesheet', 'plg_system_quantumspbuilder/spbuilder.css', [
-                'version' => filemtime(__FILE__),
-                'relative' => true
-            ]);
+			if (!$this->accessCheck())
+			{
+				return;
+			}
 
-            HTMLHelper::_('script', 'plg_system_quantumspbuilder/modal.js', [
-                'version' => filemtime(__FILE__),
-                'relative' => true
-            ]);
+			$check = ($option === 'com_sppagebuilder' && $view === 'form' && $layout === 'edit');
+		}
 
-            HTMLHelper::_('script', 'com_quantummanager/utils.js', [
-                'version' => filemtime(__FILE__),
-                'relative' => true
-            ]);
+		if ($check)
+		{
+			HTMLHelper::_('stylesheet', 'plg_system_quantumspbuilder/spbuilder.css', [
+				'version'  => filemtime(__FILE__),
+				'relative' => true
+			]);
 
-            QuantummanagerHelper::loadLang();
+			HTMLHelper::_('script', 'plg_system_quantumspbuilder/modal.js', [
+				'version'  => filemtime(__FILE__),
+				'relative' => true
+			]);
 
-            $insert = htmlspecialchars(Text::_('COM_QUANTUMMANAGER_ACTION_SELECT'), ENT_QUOTES);
-            $cancel = htmlspecialchars(Text::_('COM_QUANTUMMANAGER_ACTION_CANCEL'), ENT_QUOTES);
-            Factory::getDocument()->addScriptDeclaration(<<<EOT
+			HTMLHelper::_('script', 'com_quantummanager/utils.js', [
+				'version'  => filemtime(__FILE__),
+				'relative' => true
+			]);
+
+			QuantummanagerHelper::loadLang();
+
+			$insert = htmlspecialchars(Text::_('COM_QUANTUMMANAGER_ACTION_SELECT'), ENT_QUOTES);
+			$cancel = htmlspecialchars(Text::_('COM_QUANTUMMANAGER_ACTION_CANCEL'), ENT_QUOTES);
+
+			/** @var WebAssetManager $wa */
+			$wa = Factory::getApplication()->getDocument()->getWebAssetManager();
+			$wa->addInlineScript(<<<EOT
 window.QuantumSpbuilderLang = {
 		'insert': "{$insert}",
 		'cancel': "{$cancel}",
 };
 EOT
-            );
+			);
 		}
 
-        if($option === 'com_sppagebuilder' && $view === 'media')
-        {
+		if ($option === 'com_sppagebuilder' && $view === 'media')
+		{
+			HTMLHelper::_('stylesheet', 'plg_system_quantumspbuilder/formain.css', [
+				'version'  => filemtime(__FILE__),
+				'relative' => true
+			]);
 
-            HTMLHelper::_('stylesheet', 'plg_system_quantumspbuilder/formain.css', [
-                'version' => filemtime(__FILE__),
-                'relative' => true
-            ]);
-
-            HTMLHelper::_('script', 'plg_system_quantumspbuilder/formain.js', [
-                'version' => filemtime(__FILE__),
-                'relative' => true
-            ]);
-        }
-
+			HTMLHelper::_('script', 'plg_system_quantumspbuilder/formain.js', [
+				'version'  => filemtime(__FILE__),
+				'relative' => true
+			]);
+		}
 	}
 
-	public function onAjaxQuantumspbuilder()
+	public function onAjax(): void
 	{
-
-        if(!$this->accessCheck())
-        {
+		if (!$this->accessCheck())
+		{
 			return;
-        }
+		}
 
-        $layout = new FileLayout('select', JPATH_SITE . '/plugins/system/quantumspbuilder/tmpl');
+		$layout = new FileLayout('select', JPATH_SITE . '/plugins/system/quantumspbuilder/tmpl');
 		echo $layout->render();
 	}
 
-	protected function accessCheck()
+	private function accessCheck(): bool
 	{
-
 		if ($this->app->isClient('administrator'))
 		{
 			return true;
 		}
 
-		// проверяем на включенность параметра
-		if(!(int)QuantummanagerHelper::getParamsComponentValue('front', 0))
+		if (!(int) QuantummanagerHelper::getParamsComponentValue('front', 0))
 		{
 			return false;
 		}
 
-		// проверяем что пользователь авторизован
-		if(Factory::getUser()->id === 0)
+		if (Factory::getApplication()->getIdentity()->id === 0)
 		{
 			return false;
 		}
